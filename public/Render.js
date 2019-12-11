@@ -3,19 +3,19 @@ import { cardData } from "./engine/Cards.js";
 // assigns the authorization app to an easily typed variable bc im lazy
 let auth = firebase.auth();
 let cardgame;
-let playeratt=[];
-playeratt[0]=false;
-playeratt[1]=false;
-playeratt[2]=false;
-playeratt[3]=false;
-playeratt[4]=false;
+let playeratt = [];
+playeratt[0] = false;
+playeratt[1] = false;
+playeratt[2] = false;
+playeratt[3] = false;
+playeratt[4] = false;
 
-let playerattacked=[]
-playerattacked[0]=false;
-playerattacked[1]=false;
-playerattacked[2]=false;
-playerattacked[3]=false;
-playerattacked[4]=false;
+let playerattacked = []
+playerattacked[0] = false;
+playerattacked[1] = false;
+playerattacked[2] = false;
+playerattacked[3] = false;
+playerattacked[4] = false;
 
 // handles login button press
 function toggleSignIn() {
@@ -192,9 +192,9 @@ export function startgame() {
 
         //** fix fix fix fix fix  */
         wpicture += `<div id="aiDeck"> Card Left in Enemy Deck: ${cardgame.aiDeck.length}</div>`;
-        wpicture += `<br>`;
+        wpicture += `<br><`;
         wpicture += `<div id="aiBoard">${cardgame.aiboard}</div>`;
-        wpicture += `<br>`;
+        wpicture += `<br><`;
 
         wpicture += `<div id="playerBoard">${cardgame.playerboard}</div>`;
         wpicture += `<br>`;
@@ -210,9 +210,9 @@ export function startgame() {
             // }
         }
         wpicture += `<button id="endTurn" type="button">End Turn</button>`;
-        wpicture += `</div>`;
+        wpicture += `</div><hr>`;
         wpicture += `<div id="playerDeck">Cards Left in your deck: ${cardgame.playerDeck.length}</div>`
-        wpicture += `<br>`;
+        wpicture += `<br><hr>`;
         wpicture += `<div id="playerHealth">Your Health: ${cardgame.playerMana}</div>`;
     }
     loadboard();
@@ -251,7 +251,7 @@ function update() {
             console.log(cardgame.playerboard[i]);
             // }
         }
-        wpicture+=`</div>`;
+        wpicture += `</div>`;
         wpicture += `<br>`;
         //Pulls in our hand and gives each card a id of
         //playerhand-0,playerhand-1, and so forth till 6 (7 total)
@@ -281,11 +281,12 @@ function wikipage() {
     const $root = $('#root');
     let x = ``
     $root.html(' ');
-    //Need to work with how we access card database.
+    x += `<div><input type="text" id="search"/>`
+    x += `<button type="button" id="searchButton">Search</button></div>`;
+    x += `<div id="searchDiv" style="display:none"><a href="" id="searchLink">Go to Card</a></div><br>`
     for (let i = 0; i < 50; i++) {
-        x += `<div id="card-${cardData[i].id}">` +
-
-            `<h3 id="title">${cardData[i].name}</h3>` +
+        x += `<div id="card-${cardData[i].id}" class="div">` +
+            `<h3 id="${cardData[i].id}">${cardData[i].name}</h3>` +
             `<p id="img"><img src="/graphics/cards/${cardData[i].name}.img"></p>` +
             `<p id="ability">${cardData[i].abilityName}: ${cardData[i].abilityDescription}</p>` +
             `<p id="attdef">Attack: ${cardData[i].attack} Defense: ${cardData[i].defense}</p>` +
@@ -294,6 +295,32 @@ function wikipage() {
             `</div><br>`;
     }
     $root.append(x);
+    let results = ["Kris Jordan", "Departmental King, KMP", "The Eternal One: David Plaisted",
+        "COMP110 TA", "Office Hours", "Curve", "Stack Overflow", "Exam", "Snoeyink the Origami Lord",
+        "Anish, the Prankster", "Comp Sci Overcrowding!", "Sitterson Pizza Event", "Legendary TA Rosh",
+        "Robotics Lord Ron Alterovitz", "Legendary Professor Bishop: Destroyer of Worlds", "WeedOut Classes",
+        "BS to BA", "Caffeine Addiction", "Mips Rush", "Sitterson: Departmental Home", "Procrastinate",
+        "Coding Passion", "Djisktras Algorithm", "Legendary Professor: Montek", "Legendary Professor: McMillan the Villain",
+        "Echoes of the Past: Pozefsky", "Classmates in Genome 100", "Internship", "BA to BS", "Computer Science Friends",
+        "Computer Science Enemies", "Good Study Group", "Bad Study Group", "Code Leech", "Honour Court",
+        "Switch to Comp Minor", "Hackathon", "Tech Job Fair", "Fred Brooks", "Pearl Hacks",
+        "Obscure Youtube Coding Tutorial Channel", "Comp 426 Selfie", "Crying in the Sitterson Bathroom",
+        "Kurama", "Rate my Professor", "Skipping Class", "Bug", "The Meme Shit Post Groupme", "CPU Hat",
+        "Graduation"];
+    $("#search").autocomplete({
+        source: results
+    });
+}
+function search() {
+    let name = document.getElementById("search").value;
+    let x = "#";
+    for (let i = 0; i < 50; i++) {
+        if (name === cardData[i].name) {
+            x += cardData[i].id;
+        }
+    }
+    $("#searchLink").attr("href", x);
+    document.getElementById("searchDiv").style.display = "block";
 }
 
 function cardPlay(x, y) {
@@ -303,9 +330,9 @@ function cardPlay(x, y) {
 }
 
 //JINKIES FUCKING SCOOBEROOO
-function cardAttack(x){
+function cardAttack(x) {
     //If it exists?
-    if(cardgame.playerboard[x].attack!=0){
+    if (cardgame.playerboard[x].attack != 0) {
         cardgame.playerboard[x].attack;
     }
 }
@@ -418,62 +445,64 @@ $(function () {
     $(document).on('click', '#playerhand-4', function () { cardPlay(4, true); update(); })
 
     $(document).on('click', '#playerboard-0', function () {
-        if(playerattacked[0]===false){
-            playeratt[0]=true;
-            for(let i = 1 ; i<5; i++){
-                playeratt[i]=false;
+        if (playerattacked[0] === false) {
+            playeratt[0] = true;
+            for (let i = 1; i < 5; i++) {
+                playeratt[i] = false;
             }
         }
     })
 
     $(document).on('click', '#playerboard-1', function () {
-        if(playerattacked[1]===false){
-            for(let i = 0 ; i<5; i++){
-                playeratt[i]=false;
+        if (playerattacked[1] === false) {
+            for (let i = 0; i < 5; i++) {
+                playeratt[i] = false;
             }
-            playeratt[1]=true;
+            playeratt[1] = true;
         }
     })
 
     $(document).on('click', '#playerboard-2', function () {
-        if(playerattacked[2]===false){
-            for(let i = 0 ; i<5; i++){
-                playeratt[i]=false;
+        if (playerattacked[2] === false) {
+            for (let i = 0; i < 5; i++) {
+                playeratt[i] = false;
             }
-            playeratt[2]=true;
+            playeratt[2] = true;
         }
     })
 
     $(document).on('click', '#playerboard-3', function () {
-        if(playerattacked[3]===false){
-            for(let i = 0 ; i<5; i++){
-                playeratt[i]=false;
+        if (playerattacked[3] === false) {
+            for (let i = 0; i < 5; i++) {
+                playeratt[i] = false;
             }
-            playeratt[3]=true;
-        }})
+            playeratt[3] = true;
+        }
+    })
 
     $(document).on('click', '#playerboard-4', function () {
-        if(playerattacked[4]===false){
-            for(let i = 0 ; i<5; i++){
-                playeratt[i]=false;
+        if (playerattacked[4] === false) {
+            for (let i = 0; i < 5; i++) {
+                playeratt[i] = false;
             }
-            playeratt[4]=true;
+            playeratt[4] = true;
         }
     })
 
     $(document).on('click', '#aiboard-0', function () {
-        for(let i = 0; i<5; i++){
-            if(playerattacked[i]===false&&playeratt[i]===true){
-                cardAttack(i,0);
+        for (let i = 0; i < 5; i++) {
+            if (playerattacked[i] === false && playeratt[i] === true) {
+                cardAttack(i, 0);
             }
         }
 
     })
-    $(document).on('click', '#aiboard-1', function () { cardAttack()})
-    $(document).on('click', '#aiboard-2', function () { cardAttack()})
-    $(document).on('click', '#aiboard-3', function () { cardAttack()})
-    $(document).on('click', '#aiboard-4', function () { cardAttack()})
+    $(document).on('click', '#aiboard-1', function () { cardAttack() })
+    $(document).on('click', '#aiboard-2', function () { cardAttack() })
+    $(document).on('click', '#aiboard-3', function () { cardAttack() })
+    $(document).on('click', '#aiboard-4', function () { cardAttack() })
 
+    $(document).on('click', '#searchButton', function () { search() });
 
 
     $(document).on('click', '#playAgain', function () {
@@ -482,8 +511,8 @@ $(function () {
 
     $(document).on('click', '#endTurn', function () {
         cardgame.endTurn();
-        for(let i = 0; i <5; i++){
-            playerattacked[i]=false;
+        for (let i = 0; i < 5; i++) {
+            playerattacked[i] = false;
         }
         //insert ai function call
         cardgame.AI();
