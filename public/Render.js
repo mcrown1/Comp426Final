@@ -222,7 +222,7 @@ function update() {
         wpicture += `<br>`;
         wpicture += `<div id="aiBoard">`
         for (let i = 0; i < cardgame.aiboard.length; i++) {
-            wpicture += `<div id="aiboard-${i}" class="aiCards"><img src="/images/cards/${cardgame.aiboard[i].id}.png"></div>`;
+            wpicture += `<div id="aiboard-${i}"><img src="/images/cards/${cardgame.aiboard[i].id}.png" class="aiBoardCards"></div>`;
         }
         wpicture += `</div>`
         wpicture += `<br>`;
@@ -230,7 +230,7 @@ function update() {
         for (let i = 0; i < cardgame.playerboard.length; i++) {
             // if (cardgame.playerhand[i].id !== 50) {
             // wpicture += `<div id="playerhand-${i}>${cardgame.playerhand[i].cardimg}</div>`
-            wpicture += `<div id="playerboard-${i}" class="playerBoardCards"><p><img src="/images/cards/${cardgame.playerboard[i].id}.png"></p></div>`;
+            wpicture += `<div id="playerboard-${i}"><img src="/images/cards/${cardgame.playerboard[i].id}.png" class="playerBoardCards"></div>`;
             // }
         }
         wpicture += `</div>`;
@@ -254,7 +254,6 @@ function update() {
     loadboard();
     $root.empty();
     $root.append(wpicture);
-
 }
 
 function wikipage() {
@@ -271,7 +270,7 @@ function wikipage() {
     x += `<div id="searchDiv" style="display:none"><a href="" id="searchLink">Go to Card</a></div>`
     //Need to work with how we access card database.
     for (let i = 0; i < 50; i++) {
-        x += `<div id="card-${cardData[i].id}">` +
+        x += `<div id="${cardData[i].id}">` +
 
             `<h3 id="title">${cardData[i].name}</h3>` +
             `<p id="img"><img src="/images/cards/${cardData[i].id}.png"></p>` +

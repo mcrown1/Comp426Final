@@ -158,3 +158,84 @@ Dev App Server is now running.
 [info] ✔  All emulators started, it is now safe to connect.
 [debug] [2019-12-12T13:40:20.746Z] [worker-~diagnostic~-67d394c1-2e48-4a5a-aac5-3f13de3bc2cc]: exited
 [debug] [2019-12-12T13:40:20.746Z] [worker-~diagnostic~-67d394c1-2e48-4a5a-aac5-3f13de3bc2cc]: FINISHED
+[debug] [2019-12-12T18:15:16.458Z] ----------------------------------------------------------------------
+[debug] [2019-12-12T18:15:16.461Z] Command:       /usr/local/bin/node /Users/MollyCrown/Documents/GitHub/Comp426Final/node_modules/.bin/firebase emulators:start
+[debug] [2019-12-12T18:15:16.462Z] CLI Version:   7.9.0
+[debug] [2019-12-12T18:15:16.462Z] Platform:      darwin
+[debug] [2019-12-12T18:15:16.462Z] Node Version:  v10.16.3
+[debug] [2019-12-12T18:15:16.469Z] Time:          Thu Dec 12 2019 13:15:16 GMT-0500 (Eastern Standard Time)
+[debug] [2019-12-12T18:15:16.469Z] ----------------------------------------------------------------------
+[debug] [2019-12-12T18:15:16.469Z] 
+[debug] [2019-12-12T18:15:16.488Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2019-12-12T18:15:16.489Z] > authorizing via signed-in user
+[info] i  emulators: Starting emulators: functions, firestore, database, hosting
+[warn] ⚠  Your requested "node" version "8" doesn't match your global version "10"
+[info] ✔  functions: Emulator started at http://localhost:5002
+[info] i  firestore: Serving ALL traffic (including WebChannel) on http://localhost:8080
+[warn] ⚠  firestore: Support for WebChannel on a separate port (8081) is DEPRECATED and will go away soon. Please use port above instead.
+[debug] [2019-12-12T18:15:16.882Z] Ignoring unsupported arg: projectId
+[debug] [2019-12-12T18:15:16.882Z] Ignoring unsupported arg: auto_download
+[debug] [2019-12-12T18:15:16.882Z] Starting emulator firestore with command {"binary":"java","args":["-Duser.language=en","-jar","/Users/MollyCrown/.cache/firebase/emulators/cloud-firestore-emulator-v1.10.2.jar","--host","localhost","--port",8080,"--rules","/Users/MollyCrown/Documents/GitHub/Comp426Final/firestore.rules","--functions_emulator","localhost:5002","--webchannel_port",8081],"optionalArgs":["port","webchannel_port","host","rules","functions_emulator"],"joinArgs":false}
+[info] i  firestore: Emulator logging to firestore-debug.log
+[debug] [2019-12-12T18:15:19.613Z] API endpoint: http://localhost
+[debug] [2019-12-12T18:15:19.613Z] :8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+
+[info] ✔  firestore: Emulator started at http://localhost:8080
+[info] i  firestore: For testing set FIRESTORE_EMULATOR_HOST=localhost:8080
+[debug] [2019-12-12T18:15:19.697Z] Ignoring unsupported arg: projectId
+[debug] [2019-12-12T18:15:19.697Z] Ignoring unsupported arg: auto_download
+[debug] [2019-12-12T18:15:19.697Z] Ignoring unsupported arg: rules
+[debug] [2019-12-12T18:15:19.697Z] Starting emulator database with command {"binary":"java","args":["-Duser.language=en","-jar","/Users/MollyCrown/.cache/firebase/emulators/firebase-database-emulator-v4.2.0.jar","--host","localhost","--port",9000,"--functions_emulator_host","localhost","--functions_emulator_port",5002],"optionalArgs":["port","host","functions_emulator_port","functions_emulator_host"],"joinArgs":false}
+[info] i  database: Emulator logging to database-debug.log
+[debug] [2019-12-12T18:15:21.238Z] WARNING: An illegal reflective access operation has occurred
+WARNING: Illegal reflective access by io.netty.util.internal.ReflectionUtil (file:/Users/MollyCrown/.cache/firebase/emulators/firebase-database-emulator-v4.2.0.jar) to field sun.nio.ch.SelectorImpl.selectedKeys
+WARNING: Please consider reporting this to the maintainers of io.netty.util.internal.ReflectionUtil
+WARNING: Use --illegal-access=warn to enable warnings of further illegal reflective access operations
+WARNING: All illegal access operations will be denied in a future release
+[debug] [2019-12-12T18:15:21.238Z] 
+
+[debug] [2019-12-12T18:15:22.778Z] 13:15:22.774 [NamespaceSystem-akka.actor.default-dispatcher-2] INFO akka.event.slf4j.Slf4jLogger - Slf4jLogger started
+
+[debug] [2019-12-12T18:15:23.575Z] 13:15:23.574 [main] INFO com.firebase.server.forge.App$ - Listening at localhost:9000
+
+[info] ✔  database: Emulator started at http://localhost:9000
+[info] i  database: For testing set FIREBASE_DATABASE_EMULATOR_HOST=localhost:9000
+[debug] [2019-12-12T18:15:23.776Z] > refreshing access token with scopes: ["email","https://www.googleapis.com/auth/cloud-platform","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","openid"]
+[debug] [2019-12-12T18:15:23.777Z] >>> HTTP REQUEST POST https://www.googleapis.com/oauth2/v3/token  
+ <request body omitted>
+[debug] [2019-12-12T18:15:23.920Z] <<< HTTP RESPONSE 200
+[debug] [2019-12-12T18:15:23.936Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/final-f637a/webApps/-/config  
+ 
+[debug] [2019-12-12T18:15:24.426Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: public
+[info] ✔  hosting: Local server: http://localhost:5003
+[info] ✔  hosting: Emulator started at http://localhost:5003
+[info] i  functions: Watching "/Users/MollyCrown/Documents/GitHub/Comp426Final/functions" for Cloud Functions...
+[debug] [2019-12-12T18:15:24.722Z] [worker-~diagnostic~-04ca4fec-d9e8-4dac-9a3b-eb627f74189f]: Assigning socketPath: /var/folders/kl/5xd17h6d26q_zj0npq3c3ff40000gn/T/fire_emu_6713.sock
+[debug] [2019-12-12T18:15:24.722Z] [worker-~diagnostic~-04ca4fec-d9e8-4dac-9a3b-eb627f74189f]: BUSY
+[debug] [2019-12-12T18:15:25.488Z] [runtime-status] [6713] Functions runtime initialized. {"cwd":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions","node_version":"10.16.3"}
+[debug] [2019-12-12T18:15:25.503Z] [runtime-status] [6713] Disabled runtime features: undefined
+[debug] [2019-12-12T18:15:25.525Z] [runtime-status] [6713] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.8.0","resolution":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/firebase-admin/lib/index.js"}
+[debug] [2019-12-12T18:15:25.532Z] [runtime-status] [6713] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-12-12T18:15:26.248Z] [runtime-status] [6713] Found google-gax at /Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/google-gax/build/src/index.js
+[debug] [2019-12-12T18:15:26.249Z] [runtime-status] [6713] Outgoing network have been stubbed. [{"name":"http","status":"mocked"},{"name":"http","status":"mocked"},{"name":"https","status":"mocked"},{"name":"https","status":"mocked"},{"name":"net","status":"mocked"},{"name":"google-gax","status":"mocked"}]
+[debug] [2019-12-12T18:15:26.341Z] [runtime-status] [6713] Checked functions.config() {"config":{}}
+[debug] [2019-12-12T18:15:26.342Z] [runtime-status] [6713] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-12-12T18:15:26.343Z] [runtime-status] [6713] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.8.0","resolution":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/firebase-admin/lib/index.js"}
+[debug] [2019-12-12T18:15:26.344Z] [runtime-status] [6713] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/firebase-functions/lib/index.js"}
+[debug] [2019-12-12T18:15:26.447Z] [runtime-status] [6713] firebase-admin has been stubbed. {"adminResolution":{"declared":true,"installed":true,"version":"8.8.0","resolution":"/Users/MollyCrown/Documents/GitHub/Comp426Final/functions/node_modules/firebase-admin/lib/index.js"}}
+[info] ✔  All emulators started, it is now safe to connect.
+[debug] [2019-12-12T18:15:26.470Z] [worker-~diagnostic~-04ca4fec-d9e8-4dac-9a3b-eb627f74189f]: exited
+[debug] [2019-12-12T18:15:26.470Z] [worker-~diagnostic~-04ca4fec-d9e8-4dac-9a3b-eb627f74189f]: FINISHED
+[debug] [2019-12-12T18:15:28.297Z] Dec 12, 2019 1:15:28 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+
+[debug] [2019-12-12T18:15:28.562Z] Dec 12, 2019 1:15:28 PM io.gapi.emulators.netty.NotFoundHandler handleRequest
+INFO: Unknown request URI: /favicon.ico
+
