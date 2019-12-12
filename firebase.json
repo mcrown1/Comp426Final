@@ -9,12 +9,7 @@
     "source": "functions"
   },
   "hosting": {
-    "public": "public",
-    "ignore": [
-      "firebase.json",
-      "**/.*",
-      "**/node_modules/**"
-    ]
+    "public": "public"
   },
   "firestore": {
     "rules": "firestore.rules",
@@ -26,6 +21,9 @@
   "emulators": {
     "functions": {
       "port": 5002
+    },
+    "firestore": {
+      "port": 8080
     },
     "firestore": {
       "port": 8080
