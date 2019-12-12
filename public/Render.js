@@ -30,9 +30,7 @@ function toggleSignIn() {
         // gets email and password from submitted form 
         let email = document.getElementById('email').value; 
         let password = document.getElementById('password').value; 
-        auth.signInWithEmailAndPassword(email, password).then(function() {
-            window.location.href="game.html"; 
-        }).catch(function(error) {
+        auth.signInWithEmailAndPassword(email, password).then(loadGamePage).catch(function(error) {
             // handles sign in errors here 
             let errorCode = error.code; 
             let errorMessage = error.message; 
@@ -41,9 +39,38 @@ function toggleSignIn() {
             } else {
                 alert(errorMessage);
             }
-            console.log(error);
+
         })
     }
+}
+
+function loadGamePage() {
+    const $root = $('#root');
+    $root.html('');
+    let page = ``;
+    page += `
+        <div class="hero">
+            <div class="hero-content">
+                <button id="play" type="button">Play Game</button>
+                <button id="howTo">How to Play</button>
+              <button id="wiki">Card Wiki</button>
+              <button id="initialLoginButton" onclick="document.getElementById('loginForm').style.display='block'">Login</button>
+            </div>
+        </div>
+    `;
+    $root.append(page);
+    document.getElementById('loginForm').style.display='none'
+}
+
+function handleSignInWithGoogle() {
+    var provider = new firebase.auth.GoogleAuthProvider(); 
+    firebase.auth().signInWithPopup(provider).then(loadGamePage).catch(function(error) {
+        if (error.code === 'auth/account-exists-with-different-credential') {
+            //handle that here 
+        } else {
+            alert(error.message); 
+        }
+    }); 
 }
 
 // handles sign up button press
@@ -51,9 +78,7 @@ function handleSignUp() {
     let email = document.getElementById('email').value; 
     let password = document.getElementById('password').value; 
     // creates user with email and password gathered above 
-    auth.createUserWithEmailAndPassword(email, password).then(function() {
-        window.location.href="game.html"; 
-    }).catch(function(error) {
+    auth.createUserWithEmailAndPassword(email, password).then(loadGamePage).catch(function(error) {
         // handles error here 
         let errorCode = error.code; 
         let errorMessage = error.message; 
@@ -62,7 +87,7 @@ function handleSignUp() {
         } else {
             alert(errorMessage);
         }
-        console.log(error);
+
     });
 }
 
@@ -71,10 +96,15 @@ function initFirebaseAuth() {
     // Listen to auth state changes.
     auth.onAuthStateChanged(firebase.auth().onAuthStateChanged(user => {
         if (user) {
-            window.location = 'localhost:5000/game.html'; //After successful login, user will be redirected to game.html
-            // TODO STILL NEED TO GET THIS TO WORK
+            loadGamePage(); 
         }
     }));
+}
+
+function loadGameIfSignedIn() {
+    if (user) {
+        loadGamePage(); 
+    }
 }
 
 function handleResetEmail() {
@@ -88,19 +118,6 @@ function handleResetEmail() {
     });
 }
 
-function loadGamePage() {
-    const $root = $('#gameRoot');
-    let page = ``;
-    page += `
-        <div class="hero">
-            <div class="hero-content">
-                <button id="play" type="button">Play Game</button>
-            </div>
-        </div>
-    `;
-    $root.append(page);
-}
-
 export function landingPage() {
     const $root = $('#root');
     $root.html('');
@@ -109,7 +126,7 @@ export function landingPage() {
       <div class='hero'>
           <div class='hero-content'>
               <!--The regular content-->
-              <img src='' alt='logo'><br>
+
               <button id="howTo">How to Play</button>
               <button id="wiki">Card Wiki</button>
               <button id="initialLoginButton" onclick="document.getElementById('loginForm').style.display='block'">Login</button>
@@ -126,50 +143,53 @@ export function startgame() {
     cardgame.start();
 
     const $root = $('#root');
+    let wpicture=``
     $root.html(' ');
-
-    let wpicture = `<div id="all">`
+    wpicture+=`<button id="how-to-back-to-home">Go Back</button>`
+    wpicture+=`<button id="play" type="button">New Game</button>`
+     wpicture += `<div id="all">`
     const loadboard = function () {
-        wpicture += `<div id="aiHealth">Enemy Health: ${cardgame.aiMana}</div>`;
+        wpicture += `<div id="aiData">Smol Brain<br><div id="aiHealth">${cardgame.aiMana}</div></div>`;
         wpicture += `<br>`;
         //Cardbacks for the AI
-        wpicture += `<div id="aiHand">`
-        for (let i = 0; i < cardgame.aihand.length; i++) {
-            // wpicture += `<div id="aihand-${i}>${cardgame.cardback}</div>`
-            wpicture += `<div id="aihand-${i}>${cardgame.aihand[i].name}</div>`
+        // wpicture += `<div id="aiHand">`
+        // for (let i = 0; i < cardgame.aihand.length; i++) {
+        //     // wpicture += `<div id="aihand-${i}>${cardgame.cardback}</div>`
+        //     wpicture += `<div id="aihand-${i}" class="aiCards">${cardgame.aihand[i].name}</div>`
 
 
-        }
-        wpicture += `</div>`;
+        // }
+        // wpicture += `</div>`;
         wpicture += `<br>`;
         //I may need to write a check, because if we're replacing the cards
         //Used with blank cards then we will need a for loop to fix shit up.
 
         //** fix fix fix fix fix  */
-        wpicture += `<div id="aiDeck"> Card Left in Enemy Deck: ${cardgame.aiDeck.length}</div>`;
+        wpicture += `<div id="aiDeck">Cards Left: ${cardgame.aiDeck.length}</div>`;
         wpicture += `<br>`;
+        wpicture += `<button id="endTurn" type="button">End Turn</button>`;
+        wpicture += `<div id="aiBoard">`;
         for (let i = 0; i < cardgame.aiboard.length; i++) {
-            wpicture += `<div id="aiboard-${i}">${cardgame.aiboard[i].name}</div>`;
-        } wpicture += `<br>`;
-
+            wpicture += `<div id="aiboard-${i}" class="aiBoardCards">${cardgame.aiboard[i].name}</div>`;
+        }
+        wpicture += `</div>`
+        wpicture += `<br>`;
         wpicture += `<div id="playerBoard">${cardgame.playerboard}</div>`;
         wpicture += `<br>`;
+        wpicture += `<div id="playerData">You<br><div id="playerHealth">${cardgame.playerMana}</div></div>`;
         //Pulls in our hand and gives each card a id of
         //playerhand-0,playerhand-1, and so forth till 6 (7 total)
-        wpicture += `<div id="playerHand">`
+        wpicture += `<div id="playerHand">`;
         ////////////////////////////////////////BIG NEED TO FIX  Draw isn't working???
         for (let i = 0; i < cardgame.playerhand.length; i++) {
             // if (cardgame.playerhand[i].id !== 50) {
             // wpicture += `<div id="playerhand-${i}>${cardgame.playerhand[i].cardimg}</div>`
-            wpicture += `<div id="playerhand-${i}"><p>${cardgame.playerhand[i].name}</p></div>`
+            wpicture += `<div id="playerhand-${i}" class="playerCards"><p>${cardgame.playerhand[i].name}</p></div>&nbsp&nbsp&nbsp&nbsp`
 
             // }
         }
-        wpicture += `<button id="endTurn" type="button">End Turn</button>`;
+        wpicture += `<div id="playerDeck">Cards Left: ${cardgame.playerDeck.length}</div>`
         wpicture += `</div>`;
-        wpicture += `<div id="playerDeck">Cards Left in your deck: ${cardgame.playerDeck.length}</div>`
-        wpicture += `<br>`;
-        wpicture += `<div id="playerHealth">Your Health: ${cardgame.playerMana}</div>`;
     }
     loadboard();
     $root.append(wpicture);
@@ -178,59 +198,59 @@ export function startgame() {
 function update() {
     const $root = $('#root');
     // startgame();
-    let wpicture = `<div id="all">`
+    let wpicture=``
+    wpicture+=`<button id="how-to-back-to-home">Go Back</button>`
+    wpicture+=`<button id="play" type="button">New Game</button>`
+     wpicture += `<div id="all">`
     const loadboard = function () {
-        wpicture += `<div id="aiHealth">Enemy Health: ${cardgame.aiMana}</div>`;
+        wpicture += `<div id="aiData">Smol Brain<br><div id="aiHealth">${cardgame.aiMana}</div></div>`;
         wpicture += `<br>`;
         //Cardbacks for the AI
-        wpicture += `<div id="aiHand">`
-        for (let i = 0; i < cardgame.aihand.length; i++) {
-            // wpicture += `<div id="aihand-${i}>${cardgame.cardback}</div>`
-            wpicture += `<div id="aihand-${i}>${cardgame.aihand[i].name}</div>`
+        // wpicture += `<div id="aiHand">`
+        // for (let i = 0; i < cardgame.aihand.length; i++) {
+        //     // wpicture += `<div id="aihand-${i}>${cardgame.cardback}</div>`
+        //     wpicture += `<div id="aihand-${i}" class="aiCards">${cardgame.aihand[i].name}</div>`
 
 
-        }
-        wpicture += `</div>`;
+        // }
+        // wpicture += `</div>`;
         wpicture += `<br>`;
         //I may need to write a check, because if we're replacing the cards
         //Used with blank cards then we will need a for loop to fix shit up.
 
         //** fix fix fix fix fix  */
-        wpicture += `<div id="aiDeck"> Card Left in Enemy Deck: ${cardgame.aiDeck.length}</div>`;
+        wpicture += `<div id="aiDeck">Cards Left: ${cardgame.aiDeck.length}</div>`;
         wpicture += `<br>`;
-        wpicture += `<div id="aiboard">`
+        wpicture += `<div id="aiBoard">`
         for (let i = 0; i < cardgame.aiboard.length; i++) {
-            wpicture += `<div id="aiboard-${i}">${cardgame.aiboard[i].name}</div>`;
-            console.log('Ai board at ' + i + ': ' + cardgame.aiboard[i].name);
+            wpicture += `<div id="aiboard-${i}" class="aiCards"><img src="/images/cards/${cardgame.aiboard[i].id}.png"></div>`;
         }
         wpicture += `</div>`
         wpicture += `<br>`;
-        wpicture += `<div id="playerboard">`;
+        wpicture += `<div id="playerBoard">`;
         for (let i = 0; i < cardgame.playerboard.length; i++) {
             // if (cardgame.playerhand[i].id !== 50) {
             // wpicture += `<div id="playerhand-${i}>${cardgame.playerhand[i].cardimg}</div>`
-            wpicture += `<div id="playerboard-${i}"><p>${cardgame.playerboard[i].name}</p></div>`;
+            wpicture += `<div id="playerboard-${i}" class="playerBoardCards"><p><img src="/images/cards/${cardgame.playerboard[i].id}.png"></p></div>`;
             // }
         }
         wpicture += `</div>`;
         wpicture += `<br>`;
         //Pulls in our hand and gives each card a id of
         //playerhand-0,playerhand-1, and so forth till 6 (7 total)
-        wpicture += `<div id="playerHand">`
+        wpicture += `<button id="endTurn" type="button">End Turn</button>`;
+        wpicture += `<div id="playerDeck">Cards Left: ${cardgame.playerDeck.length}</div>`;
+        wpicture += `<div id="playerHand">`;
         ////////////////////////////////////////BIG NEED TO FIX  Draw isn't working???
         for (let i = 0; i < cardgame.playerhand.length; i++) {
             // if (cardgame.playerhand[i].id !== 50) {
             // wpicture += `<div id="playerhand-${i}>${cardgame.playerhand[i].cardimg}</div>`
-            wpicture += `<div id="playerhand-${i}"><p>${cardgame.playerhand[i].name}</p></div>`
+            wpicture += `<div id="playerhand-${i}" class="playerCards"><p><img src="/images/cards/${cardgame.playerhand[i].id}.png"></p></div>`
 
             // }
         }
-        wpicture += `<button id="endTurn" type="button">End Turn</button>`;
-
+        wpicture += `<div id="playerData">You<br><div id="playerHealth">${cardgame.playerMana}</div>`;
         wpicture += `</div>`;
-        wpicture += `<div id="playerDeck">Cards Left in your deck: ${cardgame.playerDeck.length}</div>`
-        wpicture += `<br>`;
-        wpicture += `<div id="playerHealth">Your Health: ${cardgame.playerMana}</div>`;
     }
     loadboard();
     $root.empty();
@@ -242,16 +262,20 @@ function wikipage() {
     const $root = $('#root');
     let x = ``
     $root.html(' ');
-    //Need to work with how we access card database.
+    x+=`
+  <button id="how-to-back-to-home">Go Back</button>
+    <button id="howTo">How to Play</button>
+    <button id="initialLoginButton" onclick="document.getElementById('loginForm').style.display='block'">Login</button>
+    `
     x += `<div><input type="text" id="search"/>`
     x += `<button type="button" id="searchButton">Search</button></div>`;
     x += `<div id="searchDiv" style="display:none"><a href="" id="searchLink">Go to Card</a></div>`
-    // does not autocomplete yet
+    //Need to work with how we access card database.
     for (let i = 0; i < 50; i++) {
-        // <div id="card-${cardData[i].id}">` +
         x += `<div id="card-${cardData[i].id}">` +
-            `<h3 id="${cardData[i].id}">${cardData[i].name}</h3>` +
-            `<p id="img"><img src="/graphics/cards/${cardData[i].name}.img"></p>` +
+
+            `<h3 id="title">${cardData[i].name}</h3>` +
+            `<p id="img"><img src="/images/cards/${cardData[i].id}.png"></p>` +
             `<p id="ability">${cardData[i].abilityName}: ${cardData[i].abilityDescription}</p>` +
             `<p id="attdef">Attack: ${cardData[i].attack} Defense: ${cardData[i].defense}</p>` +
             `<p id="cost">Cost: ${cardData[i].cost}</p>` +
@@ -275,7 +299,9 @@ function wikipage() {
     $("#search").autocomplete({
         source: results
     });
+
 }
+
 function search() {
     let name = document.getElementById("search").value;
     let x = "#";
@@ -323,7 +349,7 @@ function loadModal() {
     <span onclick="document.getElementById('loginForm').style.display='none'" class="close" title="Close Modal">&times;</span>
 
     <!-- Modal Content -->
-    <form class="modal-content animate">
+    <form class="modal-content animxsate">
 
         <div class="container" id="loginFormContent">
             <label for="email"><b>Email</b></label><br>
@@ -334,7 +360,11 @@ function loadModal() {
 
             <button type="button" id="loginSubmit">Login</button>
             <button type="button" id="createAccount">Create Account</button><br><br>
-            <div id="my-signin2"></div><br>
+            <div id="google">
+                <span class="googleLogo"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png"></span>
+                <span class="googleText">Sign In with Google</span>
+            </div>
+            <br><br>
         </div>
 
         <div class="container" style="background-color:#f1f1f1">
@@ -350,6 +380,11 @@ function howToPage() {
     const $root = $('#root');
     let text = ``
     $root.html(' ');
+    text+=`
+<button id="how-to-back-to-home">Go Back</button>
+    <button id="wiki">Card Wiki</button>
+    <button id="initialLoginButton" onclick="document.getElementById('loginForm').style.display='block'">Login</button>
+    `
     text += `
     <hr>
     <h4 class="head">Basics</h4>
@@ -383,7 +418,6 @@ function howToPage() {
 $(function () {
     landingPage();
     loadModal();
-    loadGamePage();
     initFirebaseAuth();
 
     $(document).on('click', '#play', function () {
@@ -400,11 +434,14 @@ $(function () {
     $(document).on('click', '#loginSubmit', toggleSignIn);
     $(document).on('click', '#createAccount', handleSignUp);
     $(document).on('submit', '#resetPassword', handleResetEmail);
+    $(document).on('click', '#google', handleSignInWithGoogle); 
+    $(document).on('click', '#googleLogo', handleSignInWithGoogle); 
+    $(document).on('click', '#googleText', handleSignInWithGoogle); 
 
     //Templates for xon clicks of cards and various items, need changes later ~~~~~Don't change the one above
     // whatever was above this appears to be gone lol
     $(document).on('click', '#playerhand-0', function () {
-        cardPlay(0, true); update(); win();
+        cardPlay(0, true); update();
     })
     $(document).on('click', '#playerhand-1', function () {
         cardPlay(1, true); update();
@@ -420,19 +457,19 @@ $(function () {
     })
 
     $(document).on('click', '#playerboard-0', function () {
-        console.log('is this shit clicking?0')
+
         if (playerattacked[0] === false) {
             for (let i = 0; i < 5; i++) {
                 playeratt[i] = false;
             }
             playeratt[0] = true;
-            console.log('This is Playeratt[0] and playerattacked[0]: ' + playeratt[0] + ' ' + playerattacked[0])
+
         }
 
     })
 
     $(document).on('click', '#playerboard-1', function () {
-        console.log('is this shit clicking?1')
+
 
         if (playerattacked[1] === false) {
             for (let i = 0; i < 5; i++) {
@@ -440,10 +477,10 @@ $(function () {
             }
             playeratt[1] = true;
         }
-    })
+    });
 
     $(document).on('click', '#playerboard-2', function () {
-        console.log('is this shit clicking?2')
+
 
         if (playerattacked[2] === false) {
             for (let i = 0; i < 5; i++) {
@@ -451,10 +488,10 @@ $(function () {
             }
             playeratt[2] = true;
         }
-    })
+    });
 
     $(document).on('click', '#playerboard-3', function () {
-        console.log('is this shit clicking?3')
+
 
         if (playerattacked[3] === false) {
             for (let i = 0; i < 5; i++) {
@@ -465,7 +502,7 @@ $(function () {
     })
 
     $(document).on('click', '#playerboard-4', function () {
-        console.log('is this shit clicking?4')
+
 
         if (playerattacked[4] === false) {
             for (let i = 0; i < 5; i++) {
@@ -522,15 +559,15 @@ $(function () {
     });
 
 
-    })
-    $(document).on('click', '#aiboard-1', function () { cardAttack()})
-    $(document).on('click', '#aiboard-2', function () { cardAttack()})
-    $(document).on('click', '#aiboard-3', function () { cardAttack()})
-    $(document).on('click', '#aiboard-4', function () { cardAttack()})
+    // $(document).on('click', '#aiboard-1', function () { cardAttack()})
+    // $(document).on('click', '#aiboard-2', function () { cardAttack()})
+    // $(document).on('click', '#aiboard-3', function () { cardAttack()})
+    // $(document).on('click', '#aiboard-4', function () { cardAttack()})
+
+
 
 
     $(document).on('click', '#searchButton', function () { search() });
-
 
     $(document).on('click', '#aiHealth', function () {
         for (let i = 0; i < 5; i++) {
@@ -540,9 +577,8 @@ $(function () {
             }
         }
         update();
-        console.log(cardgame.aiMana)
-    });
 
+    });
 
     $(document).on('click', '#playAgain', function () {
         startgame();
